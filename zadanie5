@@ -1,0 +1,46 @@
+# Load packages ----
+library(shiny)
+library(shinythemes)
+
+# User interface ----
+ui <- fluidPage(
+  theme = shinytheme("superhero"),
+  titlePanel("Zadanie 5"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      textInput("text",
+                label = "Wpisz tekst poniżej:", 
+                value = "lorem ipsum"),
+      numericInput("num", 
+                   label = "Wybierz numer od 0 do 100:", 
+                   min = 0, max = 100, value = 50),
+      selectInput("var", 
+                  label = "Wybierz literę od A do K:",
+                  choices = c("A","B","C","D","E","F","G","H","I","J","K"),
+                  selected = "A"),
+    ),
+    
+    mainPanel(h3("Poniżej wpisany tekst, wybrany numer i litera"),
+              br(),
+              tags$code(textOutput("selected_text")),
+              tags$strong(textOutput("selected_num")),
+              tags$em(textOutput("selected_var")))
+  )
+)
+
+# Server logic ----
+server <- function(input, output) {
+  output$selected_text <- renderText({ 
+    paste("Wpisany tekst:", input$text)
+  })
+  output$selected_num <- renderText({ 
+    paste("Wybrany numer:", input$num)
+  })
+  output$selected_var <- renderText({ 
+    paste("Wybrana litera:", input$var)
+  })
+}
+
+# Run app ----
+shinyApp(ui, server)
